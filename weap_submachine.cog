@@ -20,7 +20,6 @@ message		deactivated
 message		selected
 message		deselected
 message		callback
-message		timer
 
 sound		bang=gen_submachine_fire.wav	local	# Autoloaded
 sound		trail=gen_submachine_trail.wav	local	# Autoloaded
@@ -101,7 +100,23 @@ fire:
 		return;
 	}
 
-	SetTimerEx(0.001, 9999, -1, -1);
+	# Fire away...
+	firePos = GetThingJointPos(player, handNode);
+	
+	Sleep(0.001); # Damn Sith Engine...
+	
+	bullet = FireProjectile(player, projectile, -1, 66, firePos, '-2.5 35.0 0.0', 1.0, 0x320, aimFOV, aimMax);
+
+	if (fireSnd == -1)
+	{
+		fireSnd = PlaySoundThing(bang, player, 1.0, -1, -1, 0x881);
+	}
+
+	if (Rand() < 0.5) CreateThing(smoke1, bullet);
+	else CreateThing(smoke2, bullet);
+
+	ChangeInv(player, weaponNum, -1.0);
+	SetFireWait(player, fireWait);
 
 	return;
 
@@ -230,26 +245,5 @@ callback:
 	return;
 
 # -------------------------------------------------------------------
-
-timer:
-	# Fire away...
-	firePos = GetThingJointPos(player, handNode);
-	
-	Sleep(0.001); # Damn Sith Engine...
-	
-	bullet = FireProjectile(player, projectile, -1, 66, firePos, '-2.5 35.0 0.0', 1.0, 0x320, aimFOV, aimMax);
-
-	if (fireSnd == -1)
-	{
-		fireSnd = PlaySoundThing(bang, player, 1.0, -1, -1, 0x881);
-	}
-
-	if (Rand() < 0.5) CreateThing(smoke1, bullet);
-	else CreateThing(smoke2, bullet);
-
-	ChangeInv(player, weaponNum, -1.0);
-	SetFireWait(player, fireWait);
-
-	return;
 
 end
