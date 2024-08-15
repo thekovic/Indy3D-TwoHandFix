@@ -117,6 +117,14 @@ fire:
 		return;
 	}
 
+	# Don't fire extra rockets if one is already airborne
+	if (numRockets > 0)
+	{
+		return;
+	}
+
+	numRockets = numRockets + 1;
+
 	# Fire away...
 	firePos = GetThingJointPos(player, handNode);
 
@@ -167,7 +175,6 @@ fire:
 	}
 
 	CaptureThing(rocket);
-    numRockets = numRockets + 1;
 
 	ChangeInv(player, weaponNum, -1.0);
 	SetFireWait(player, fireWait);
